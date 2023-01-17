@@ -36,10 +36,16 @@ overlay[0].classList.add('t-none');
 
 const previous = document.querySelector('.previous');
 const next = document.querySelector('.next');
-
 let current = 0;
 
-setInterval(nextSlide, 3000);
+const invert = document.getElementById('invert');
+const playStop = document.getElementById('playStop');
+let position = 0;
+
+const forward = setInterval(nextSlide, 3000);
+const backward = setInterval(previousSlide, 3000);
+clearInterval(backward);
+let state = 0;
 
 next.addEventListener('click',
 
@@ -60,6 +66,58 @@ previous.addEventListener('click',
             console.log('Cliccato su previous');
             
             previousSlide();
+
+      }
+
+);
+
+invert.addEventListener('click',
+
+      function () {
+
+            if(position == 0) {
+
+                  clearInterval(forward);
+                  setInterval(previousSlide, 3000);
+                  position++;
+
+            } else {
+
+                  clearInterval(backward);
+                  setInterval(nextSlide, 3000);
+                  position--;
+
+            }
+
+      }
+
+);
+
+playStop.addEventListener('click',
+
+      function() {
+
+            if(position == 0 && state == 0) {
+
+                  clearInterval(forward);
+                  state++;
+
+            } else if (position == 0 && state != 0) {
+
+                  setInterval(nextSlide, 3000);
+                  state--;
+
+            } else if (position != 0 && state == 0) {
+
+                  clearInterval(backward);
+                  state++;
+
+            } else if (position != 0 && state != 0) {
+
+                  setInterval(previousSlide, 3000);
+                  state--;
+
+            }
 
       }
 
