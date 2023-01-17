@@ -45,7 +45,7 @@ next.addEventListener('click',
 
             console.log('Cliccato su next');
             
-            nextClick();
+            nextSlide();
       
       }
 
@@ -57,7 +57,7 @@ previous.addEventListener('click',
 
             console.log('Cliccato su previous');
             
-            previousClick();
+            previousSlide();
 
       }
 
@@ -98,7 +98,7 @@ function createThumbnails(arr) {
 
 }
 
-function nextClick() {
+function nextSlide() {
 
       allSlides[current].classList.remove('selected');
       allThumb[current].classList.remove('t-selected');
@@ -122,7 +122,7 @@ function nextClick() {
 
 }
 
-function previousClick() {
+function previousSlide() {
 
       allSlides[current].classList.remove('selected');
       allThumb[current].classList.remove('t-selected');
