@@ -1,33 +1,34 @@
-/*
-1. Creare array contenente le immagini 
-2. Inserire gli elementi nell'html in base al numero di elementi nell'array
-3. Rendere visibile tramite classe apposita solo la prima immagine mentre le altre sono nascoste
-4. Scrivere funzione che al click sulle frecce cambi l'immagine 
-*/
 const images = [
-      "img/01.webp",
-      "img/02.webp",
-      "img/03.webp",
-      "img/04.webp",
-      "img/05.webp"
+      {
+            image: 'img/01.webp',
+            title: 'Marvel\'s Spiderman Miles Morales',
+            text: 'Experience the rise of Miles Morales as the new hero masters incredible, explosive new powers to become his own Spider-Man.',
+      }, {
+            image: 'img/02.webp',
+            title: 'Ratchet & Clank: Rift Apart',
+            text: 'Go dimension-hopping with Ratchet and Clank as they take on an evil emperor from another reality.',
+      }, {
+            image: 'img/03.webp',
+            title: 'Fortnite',
+            text: "Grab all of your friends and drop into Epic Games Fortnite, a massive 100 - player face - off that combines looting, crafting, shootouts and chaos.",
+      }, {
+            image: 'img/04.webp',
+            title: 'Stray',
+            text: 'Lost, injured and alone, a stray cat must untangle an ancient mystery to escape a long-forgotten city',
+      }, {
+            image: 'img/05.webp',
+            title: "Marvel's Avengers",
+            text: 'Marvel\'s Avengers is an epic, third-person, action-adventure game that combines an original, cinematic story with single-player and co-operative gameplay.',
+      }
 ];
 
-const carouselSlide = document.querySelector('.carousel');
-
-for (let i = 0; i < images.length; i++) {
-
-      console.log(images[i]);
-      carouselSlide.innerHTML += `<div class="slide"><img src="${images[i]}"></div>`;
-      document.querySelector('.thumbnails').innerHTML += `<div class="t-slide"><img src="${images[i]}"><div class="t-over"></div></div>`;
-
-}
+createSlide(images);
+createThumbnails(images);
 
 const allSlides = document.querySelectorAll('.slide');
-console.log(allSlides);
 allSlides[0].classList.add('selected');
 
 const allThumb = document.querySelectorAll('.t-slide');
-console.log(allThumb);
 allThumb[0].classList.add('t-selected');
 
 const overlay = document.querySelectorAll('.t-over');
@@ -35,6 +36,7 @@ overlay[0].classList.add('t-none');
 
 const previous = document.querySelector('.previous');
 const next = document.querySelector('.next');
+
 let current = 0;
 
 next.addEventListener('click',
@@ -42,25 +44,8 @@ next.addEventListener('click',
       function () {
 
             console.log('Cliccato su next');
-            allSlides[current].classList.remove('selected');
-            allThumb[current].classList.remove('t-selected');
-            overlay[current].classList.remove('t-none');
             
-            if (current == allSlides.length - 1) {
-                  
-                  current = 0;
-                  allSlides[current].classList.add('selected');
-                  allThumb[current].classList.add('t-selected');
-                  overlay[current].classList.add('t-none');
-      
-            } else {
-
-                  current++;
-                  allSlides[current].classList.add('selected');
-                  allThumb[current].classList.add('t-selected');
-                  overlay[current].classList.add('t-none');
-
-            }
+            nextClick();
       
       }
 
@@ -71,26 +56,92 @@ previous.addEventListener('click',
       function () {
 
             console.log('Cliccato su previous');
-            allSlides[current].classList.remove('selected');
-            allThumb[current].classList.remove('t-selected');
-            overlay[current].classList.remove('t-none');
-
-            if (current == 0) {
-
-                  current = allSlides.length - 1;
-                  allSlides[current].classList.add('selected');
-                  allThumb[current].classList.add('t-selected');
-                  overlay[current].classList.add('t-none');
-
-            } else {
-
-                  current--;
-                  allSlides[current].classList.add('selected');
-                  allThumb[current].classList.add('t-selected');
-                  overlay[current].classList.add('t-none');
-
-            }
+            
+            previousClick();
 
       }
 
 );
+
+//---------------------------------------------------------------------------------------------------------------
+
+function createSlide(arr) {
+
+      for (let i = 0; i < arr.length; i++) {
+
+            document.querySelector('.carousel').innerHTML += `
+                  <div class="slide">
+                        <img src="${arr[i].image}">
+                        <div class="description">
+                              <h3>${arr[i].title}</h3>
+                              <p>${arr[i].text}</p>
+                        </div>
+                  </div>
+            `;
+
+      }
+
+}
+
+function createThumbnails(arr) {
+
+      for (let i = 0; i < arr.length; i++) {
+
+            document.querySelector('.thumbnails').innerHTML += `
+                  <div class="t-slide">
+                        <img src="${arr[i].image}">
+                        <div class="t-over"></div>
+                  </div>
+            `;
+
+      }
+
+}
+
+function nextClick() {
+
+      allSlides[current].classList.remove('selected');
+      allThumb[current].classList.remove('t-selected');
+      overlay[current].classList.remove('t-none');
+
+      if (current == allSlides.length - 1) {
+
+            current = 0;
+            allSlides[current].classList.add('selected');
+            allThumb[current].classList.add('t-selected');
+            overlay[current].classList.add('t-none');
+
+      } else {
+
+            current++;
+            allSlides[current].classList.add('selected');
+            allThumb[current].classList.add('t-selected');
+            overlay[current].classList.add('t-none');
+
+      }
+
+}
+
+function previousClick() {
+
+      allSlides[current].classList.remove('selected');
+      allThumb[current].classList.remove('t-selected');
+      overlay[current].classList.remove('t-none');
+
+      if (current == 0) {
+
+            current = allSlides.length - 1;
+            allSlides[current].classList.add('selected');
+            allThumb[current].classList.add('t-selected');
+            overlay[current].classList.add('t-none');
+
+      } else {
+
+            current--;
+            allSlides[current].classList.add('selected');
+            allThumb[current].classList.add('t-selected');
+            overlay[current].classList.add('t-none');
+
+      }
+
+}
