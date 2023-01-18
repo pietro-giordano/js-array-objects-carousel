@@ -42,10 +42,28 @@ const invert = document.getElementById('invert');
 const playStop = document.getElementById('playStop');
 let position = 0;
 
-const forward = setInterval(nextSlide, 3000);
-const backward = setInterval(previousSlide, 3000);
+let forward = setInterval(nextSlide, 3000);
+let backward = setInterval(previousSlide, 3000);
 clearInterval(backward);
+backward = false;
 let state = 0;
+
+// Per selezionare la singola thumbnail col click
+allThumb.forEach((singleThumb, index) => {
+
+      singleThumb.addEventListener('click',
+      
+            () => {
+
+                  remove();
+                  current = index;
+                  add();
+
+            }
+
+      );
+
+});
 
 next.addEventListener('click',
 
@@ -76,15 +94,17 @@ invert.addEventListener('click',
       function () {
 
             if(position == 0) {
-
+                  
                   clearInterval(forward);
-                  setInterval(previousSlide, 3000);
+                  forward = false;
+                  backward = setInterval(previousSlide, 3000);
                   position++;
 
             } else {
 
                   clearInterval(backward);
-                  setInterval(nextSlide, 3000);
+                  backward = false;
+                  forward = setInterval(nextSlide, 3000);
                   position--;
 
             }
@@ -100,21 +120,23 @@ playStop.addEventListener('click',
             if(position == 0 && state == 0) {
 
                   clearInterval(forward);
+                  forward = false;
                   state++;
 
             } else if (position == 0 && state != 0) {
 
-                  setInterval(nextSlide, 3000);
+                  forward = setInterval(nextSlide, 3000);
                   state--;
 
             } else if (position != 0 && state == 0) {
 
                   clearInterval(backward);
+                  backward = false;
                   state++;
 
             } else if (position != 0 && state != 0) {
 
-                  setInterval(previousSlide, 3000);
+                  backward = setInterval(previousSlide, 3000);
                   state--;
 
             }
@@ -158,25 +180,35 @@ function createThumbnails(arr) {
 
 }
 
-function nextSlide() {
+function remove() {
 
       allSlides[current].classList.remove('selected');
       allThumb[current].classList.remove('t-selected');
       overlay[current].classList.remove('t-none');
 
+}
+
+function add() {
+
+      allSlides[current].classList.add('selected');
+      allThumb[current].classList.add('t-selected');
+      overlay[current].classList.add('t-none');
+
+}
+
+function nextSlide() {
+
+      remove();
+
       if (current == allSlides.length - 1) {
 
             current = 0;
-            allSlides[current].classList.add('selected');
-            allThumb[current].classList.add('t-selected');
-            overlay[current].classList.add('t-none');
+            add();
 
       } else {
 
             current++;
-            allSlides[current].classList.add('selected');
-            allThumb[current].classList.add('t-selected');
-            overlay[current].classList.add('t-none');
+            add();
 
       }
 
@@ -184,23 +216,17 @@ function nextSlide() {
 
 function previousSlide() {
 
-      allSlides[current].classList.remove('selected');
-      allThumb[current].classList.remove('t-selected');
-      overlay[current].classList.remove('t-none');
+      remove();
 
       if (current == 0) {
 
             current = allSlides.length - 1;
-            allSlides[current].classList.add('selected');
-            allThumb[current].classList.add('t-selected');
-            overlay[current].classList.add('t-none');
+            add();
 
       } else {
 
             current--;
-            allSlides[current].classList.add('selected');
-            allThumb[current].classList.add('t-selected');
-            overlay[current].classList.add('t-none');
+            add();
 
       }
 
