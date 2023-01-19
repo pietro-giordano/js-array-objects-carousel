@@ -40,13 +40,13 @@ let current = 0;
 
 const invert = document.getElementById('invert');
 const playStop = document.getElementById('playStop');
-let position = 0;
+let position = false;
+let state = false;
 
 let forward = setInterval(nextSlide, 3000);
 let backward = setInterval(previousSlide, 3000);
 clearInterval(backward);
 backward = false;
-let state = 0;
 
 // Per selezionare la singola thumbnail col click
 allThumb.forEach((singleThumb, index) => {
@@ -89,25 +89,40 @@ previous.addEventListener('click',
 
 );
 
+/*
+Breve spiegazione per il futuro:
+position false = posizione di scorrimento inversa o verso l'alto
+position true = posizione di scorrimento versa o in giù
+state false = carosello in movimento
+state true = carosello fermo
+Combinati possono invertire il senso di scorrimento sia da fermo che in movimento.
+Se si clicca il pulsante d'inversione mentre il carosello è fermo il carosello ripartirà in senso inverso
+*/
+
 invert.addEventListener('click',
 
       function () {
 
-            if(position == 0) {
+            if(position == false) {
                   
                   clearInterval(forward);
                   forward = false;
                   backward = setInterval(previousSlide, 3000);
-                  position++;
+                  position = true;
+                  state = false;
 
             } else {
 
                   clearInterval(backward);
                   backward = false;
                   forward = setInterval(nextSlide, 3000);
-                  position--;
+                  position = false;
+                  state = false;
 
             }
+
+            console.log('position: ' + position);
+            console.log('state: ' + state);
 
       }
 
@@ -117,29 +132,34 @@ playStop.addEventListener('click',
 
       function() {
 
-            if(position == 0 && state == 0) {
+            if(state == false && position == false) {
 
                   clearInterval(forward);
                   forward = false;
-                  state++;
+                  state = true;
 
-            } else if (position == 0 && state != 0) {
+            } else if (state == true && position == false) {
 
+                  clearInterval(forward);
                   forward = setInterval(nextSlide, 3000);
-                  state--;
+                  state = false;
 
-            } else if (position != 0 && state == 0) {
+            } else if (state == false && position == true) {
 
                   clearInterval(backward);
                   backward = false;
-                  state++;
+                  state = true;
 
-            } else if (position != 0 && state != 0) {
+            } else {
 
+                  clearInterval(backward);
                   backward = setInterval(previousSlide, 3000);
-                  state--;
+                  state = false;
 
-            }
+            } 
+
+            console.log('position: ' + position);
+            console.log('state: ' + state);
 
       }
 
